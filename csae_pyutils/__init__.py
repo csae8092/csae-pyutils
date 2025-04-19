@@ -1,8 +1,27 @@
 import os
+import json
+
 import requests
 import pandas as pd
 from io import BytesIO
 import owncloud
+
+
+def load_json(file_path: str, encoding="utf-8") -> dict:
+    """Load and parse JSON file.
+    Args:
+        file_path (str): Path to the JSON file to be loaded.
+        encoding (str, optional): Encoding used to open the file. Defaults to "utf-8".
+    Returns:
+        dict: Dictionary containing the parsed JSON data.
+    Raises:
+        FileNotFoundError: If the specified file does not exist.
+        JSONDecodeError: If the file contains invalid JSON.
+    """
+
+    with open(file_path, "r", encoding=encoding) as fp:
+        data = json.load(fp)
+    return data
 
 
 def gsheet_to_df(sheet_id: str) -> pd.DataFrame:
