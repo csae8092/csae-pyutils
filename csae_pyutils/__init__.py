@@ -7,6 +7,30 @@ from io import BytesIO
 import owncloud
 
 
+def save_json(
+    data: dict, file_path: str, encoding="utf-8", ensure_ascii=False, indent=True
+) -> str:
+    """Save dictionary to JSON file.
+    Args:
+        data (dict): Dictionary to save as JSON.
+        file_path (str): Path where to save the JSON file.
+        encoding (str, optional): File encoding. Defaults to "utf-8".
+        ensure_ascii (bool, optional): If True, guarantee ASCII output. Defaults to False.
+        indent (bool, optional): If True, pretty-print JSON with indentation. Defaults to True.
+    Returns:
+        str: The file path.
+    Example:
+        >>> data = {"key": "value"}
+        >>> save_json(data, "output.json")
+    """
+    with open(file_path, "w", encoding=encoding) as fp:
+        if indent:
+            json.dump(data, fp, ensure_ascii=ensure_ascii, indent=indent)
+        else:
+            json.dump(data, fp, ensure_ascii=ensure_ascii, indent=indent)
+    return file_path
+
+
 def load_json(file_path_or_url: str, encoding="utf-8") -> dict:
     """Load data from a JSON file or URL.
     This function takes a file path or URL and returns the JSON data as a Python dictionary.
@@ -16,6 +40,9 @@ def load_json(file_path_or_url: str, encoding="utf-8") -> dict:
         encoding (str, optional): Character encoding to use when reading local file. Defaults to "utf-8"
     Returns:
         dict: Parsed JSON data as a Python dictionary
+    Example:
+        >>> data = load_json('data.json')  # Load from local file
+        >>> data = load_json('https://api.example.com/data.json')  # Load from URL
     """
 
     if file_path_or_url.startswith("http"):
