@@ -7,20 +7,22 @@ from io import BytesIO
 import owncloud
 
 
-def load_json(file_path: str, encoding="utf-8") -> dict:
-    """Load and parse JSON file.
+def load_json(file_path_or_url: str, encoding="utf-8") -> dict:
+    """Load data from a JSON file or URL.
+    This function takes a file path or URL and returns the JSON data as a Python dictionary.
+    The function automatically detects if the input is a URL (starts with 'http') or a local file path.
     Args:
-        file_path (str): Path to the JSON file to be loaded.
-        encoding (str, optional): Encoding used to open the file. Defaults to "utf-8".
+        file_path_or_url (str): Path to local JSON file or URL pointing to JSON data
+        encoding (str, optional): Character encoding to use when reading local file. Defaults to "utf-8"
     Returns:
-        dict: Dictionary containing the parsed JSON data.
-    Raises:
-        FileNotFoundError: If the specified file does not exist.
-        JSONDecodeError: If the file contains invalid JSON.
+        dict: Parsed JSON data as a Python dictionary
     """
 
-    with open(file_path, "r", encoding=encoding) as fp:
-        data = json.load(fp)
+    if file_path_or_url.startswith("http"):
+        data = requests.get(file_path_or_url).json()
+    else:
+        with open(file_path_or_url, "r", encoding=encoding) as fp:
+            data = json.load(fp)
     return data
 
 
